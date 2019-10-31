@@ -1,4 +1,4 @@
-## Initialize App with Tailwind CSS
+## Initialize App with Material-UI & Tailwind CSS
 
 https://github.com/DemianD/create-react-app-tailwindcss
 
