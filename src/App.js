@@ -1,19 +1,36 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { Chart } from 'react-chartjs-2';
+import { ThemeProvider } from '@material-ui/styles';
+import validate from 'validate.js';
 
-class App extends Component {
+import { chartjs } from './helpers';
+import theme from './theme';
+import 'react-perfect-scrollbar/dist/css/styles.css';
+import './assets/scss/index.scss';
+import validators from './common/validators';
+import Routes from './Routes';
+
+const browserHistory = createBrowserHistory();
+
+Chart.helpers.extend(Chart.elements.Rectangle.prototype, {
+  draw: chartjs.draw
+});
+
+validate.validators = {
+  ...validate.validators,
+  ...validators
+};
+
+export default class App extends Component {
   render() {
     return (
-      <div className="content-center">
-        <header className="min-h-screen flex flex-col items-center justify-center text-2xl">
-          <img src={logo} className="h-48 pointer-events-none" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-        </header>
-      </div>
+      <ThemeProvider theme={theme}>
+        <Router history={browserHistory}>
+          <Routes />
+        </Router>
+      </ThemeProvider>
     );
   }
 }
-
-export default App;
