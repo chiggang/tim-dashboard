@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+/*
+ * Font
+ */
+
+ @font-face {
+  font-family: 'NanumSquare Regular';
+  src: url('/fonts/NanumSquareRegular.woff2') format('woff2'),
+       url('/fonts/NanumSquareR.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}

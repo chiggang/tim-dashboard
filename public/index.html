@@ -23,10 +23,118 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
   <title>T.I.M Dashboard Dev.</title>
+  <!-- <style>
+    #ball {
+      background-color: black;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      position: absolute;
+      top: 200px;
+      left: 200px;
+      opacity: 0.7;
+      z-index: 9;
+    }
+
+    #root {
+      z-index: 1;
+    }
+  </style> -->
 </head>
+
+<!-- GamePad -->
+<!-- https://github.com/ArunMichaelDsouza/joypad.js -->
+<script src="/external_modules/joypad.min.js"></script>
+
+<!-- <script type="module">
+  import '/joypad.min.js';
+
+  let ball = document.getElementById('ball');
+  let ballMovements = { left: 200, top: 200 };
+  function resetInfo(e) {
+    console.log('No controller connected!');
+    console.log('Please connect a controller and press any key to start.');
+  };
+  function updateInfo(e) {
+    const { gamepad } = e;
+    // heading.innerText = 'Controller connected!';
+    // message.innerText = gamepad.id;
+    console.log('Controller connected!');
+    console.log(gamepad.id);
+  };
+  function vibrateController() {
+    const connectedControllers = window.joypad.instances;
+    if (Object.keys(connectedControllers).length) {
+      Object.keys(connectedControllers).forEach(controller => {
+        const gamepadInstance = connectedControllers[controller];
+        const options = {
+          startDelay: 0,
+          duration: 2000,
+          weakMagnitude: 1,
+          strongMagnitude: 1
+        };
+        console.log(gamepadInstance);
+        // These options override the global vibration settings
+        joypad.vibrate(gamepadInstance, options);
+        console.log('run');
+      });
+    }
+  };
+  resetInfo();
+  // vibrateButton.addEventListener('click', vibrateController);
+  joypad.set({
+    // Global vibration settings
+    vibration: {
+      startDelay: 500,
+      duration: 3000,
+      weakMagnitude: 1,
+      strongMagnitude: 1
+    },
+    axisMovementThreshold: 0.15
+  });
+  function moveBall(e) {
+    const { directionOfMovement, stickMoved } = e.detail;
+    const pixelsToMove = 10 * Math.sqrt(e.detail.axisMovementValue ** 2);
+    if (stickMoved === 'left_stick') {
+      switch (directionOfMovement) {
+        case 'left':
+          ballMovements.left += -pixelsToMove;
+          ball.style.left = ballMovements.left + 'px';
+          break;
+        case 'right':
+          ballMovements.left += pixelsToMove;
+          ball.style.left = ballMovements.left + 'px';
+          break;
+        case 'top':
+          ballMovements.top += -pixelsToMove;
+          ball.style.top = ballMovements.top + 'px';
+          break;
+        case 'bottom':
+          ballMovements.top += pixelsToMove;
+          ball.style.top = ballMovements.top + 'px';
+          break;
+      }
+    }
+  }
+  joypad.on('button_press', e => {
+    console.log(e.detail);
+    const { buttonName } = e.detail;
+    if (buttonName === 'button_0') {
+    }
+    vibrateController();
+  });
+  joypad.on('axis_move', e => {
+    console.log(e.detail);
+    return moveBall(e)
+  });
+  joypad.on('connect', e => updateInfo(e));
+  joypad.on('disconnect', e => resetInfo(e));
+
+</script> -->
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
+  <!-- <div id="ball"></div> -->
   <div id="root"></div>
   <!--
       This HTML file is a template.
