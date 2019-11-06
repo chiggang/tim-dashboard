@@ -71,11 +71,17 @@ const CustomRouterLink = forwardRef((props, ref) => (
 const SidebarNav = props => {
   const { pages, className, ...rest } = props;
   const classes = useStyles();
+  const [collapseMenu, setCollapseMenu] = useState([]);
   const [open, setOpen] = useState(true);
+  const [open2, setOpen2] = useState(true);
   const [joypadStatus, setJoypadStatus] = useState('');
 
   const handleClick = () => {
     setOpen(!open);
+  };
+
+  const handleClick2 = () => {
+    setOpen2(!open2);
   };
 
 
@@ -95,64 +101,134 @@ const SidebarNav = props => {
     setJoypadStatus(buttonName);
   });
 
+  // 좌측 메뉴를 생성함
+  const createMenu = () => menuItem => {
+    let menu = [];
 
+    menuItem.map(item => {
+      // 하위 메뉴의 열고 닫음 상태를 기억함
+      // setCollapseMenu([
+      //   ...collapseMenu,
+      //   {
+      //     seq: item.seq,
+      //     opened: false
+      //   }
+      // ]);
 
-
-
-
-  return (
-    <List
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
-      {pages.map(page => (
+      menu.push(
         <ListItem
           className={classes.item}
           disableGutters
-          key={page.title}
+          key={`ListItem_${item.seq}`}
         >
           <Button
             activeClassName={classes.active}
             className={classes.button}
             component={CustomRouterLink}
-            to={page.href}
+            to={item.href}
           >
-            <div className={classes.icon}>{page.icon}</div>
-            {page.title}
+            <div className={classes.icon}>{item.icon}</div>
+            {item.seq}: {item.title}
+            {/* {item.child ? <ExpandLess /> : <ExpandMore />} */}
+            {item.child ? <ExpandMore /> : ''}
           </Button>
         </ListItem>
-      ))}
+      );
 
-      <ListItem button onClick={handleClick}>
-        SubTest
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <Divider />
-        <List component="div" disablePadding>
-          <ListItem button className={classes.subButton}>
-            Test #1 [{joypadStatus}]
-          </ListItem>
-          <ListItem button className={classes.subButton}>
-            Test #2
-          </ListItem>
-          <ListItem button className={classes.subButton}>
-            Test #3
-            <FontAwesomeIcon icon={fadAmbulance} />
-          </ListItem>
-        </List>
-        <Divider />
-      </Collapse>
+      if (item.child) {
+        // menu.push(
+        //   <Collapse in={open} timeout="auto" unmountOnExit key={`ListItemCollapse_${item.seq}`}>
+        //     {createMenu(item.child)}
+        //   </Collapse>
+        // );
+      }
+    });
 
-      <ListItem
-        disableGutters
+    return menu;
+  };
+
+
+
+
+  return (
+    <>
+      <div>
+        {() => createMenu(pages)}
+      </div>
+      <Divider />
+      <List
+        {...rest}
+        className={clsx(classes.root, className)}
       >
-        <Button>
-          Menu #1
-        </Button>
-      </ListItem>
+        {pages.map(page => (
+          <ListItem
+            className={classes.item}
+            disableGutters
+            key={page.title}
+          >
+            <Button
+              activeClassName={classes.active}
+              className={classes.button}
+              component={CustomRouterLink}
+              to={page.href}
+            >
+              <div className={classes.icon}>{page.icon}</div>
+              {page.title}
+            </Button>
+          </ListItem>
+        ))}
 
-    </List>
+        <ListItem button onClick={handleClick}>
+          SubTest
+        {open ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <Divider />
+          <List component="div" disablePadding>
+            <ListItem button className={classes.subButton}>
+              Test #1 [{joypadStatus}]
+          </ListItem>
+            <ListItem button className={classes.subButton}>
+              Test #2
+          </ListItem>
+            <ListItem button className={classes.subButton} onClick={handleClick2}>
+              Test #3
+            {open2 ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={open2} timeout="auto" unmountOnExit>
+              <Divider />
+              <List component="div" disablePadding>
+                <ListItem button className={classes.subButton}>
+                  Test #11
+              </ListItem>
+                <ListItem button className={classes.subButton}>
+                  Test #22
+              </ListItem>
+                <ListItem button className={classes.subButton}>
+                  Test #33
+              </ListItem>
+              </List>
+              <Divider />
+            </Collapse>
+
+            <ListItem button className={classes.subButton}>
+              Test #4
+            <FontAwesomeIcon icon={fadAmbulance} />
+            </ListItem>
+          </List>
+          <Divider />
+        </Collapse>
+
+        <ListItem
+          disableGutters
+        >
+          <Button>
+            Menu #1
+        </Button>
+        </ListItem>
+
+      </List>
+    </>
   );
 };
 

@@ -43,41 +43,97 @@ const Sidebar = props => {
 
   const pages = [
     {
+      seq: 'A',
       title: 'Dashboard',
       href: '/dashboard',
-      icon: <DashboardIcon />
+      icon: <DashboardIcon />,
+      child: [
+        {
+          seq: 'AA',
+          title: 'SubDash #1',
+          href: '/dashboard',
+          icon: <DashboardIcon />
+        },
+        {
+          seq: 'AB',
+          title: 'SubDash #2',
+          href: '/dashboard',
+          icon: <DashboardIcon />
+        }
+      ]
     },
     {
+      seq: 'B',
       title: 'Users',
       href: '/users',
       icon: <PeopleIcon />
     },
     {
+      seq: 'C',
       title: 'Products',
       href: '/products',
       icon: <ShoppingBasketIcon />
     },
     {
+      seq: 'D',
       title: 'Authentication',
       href: '/sign-in',
-      icon: <LockOpenIcon />
+      icon: <LockOpenIcon />,
+      child: [
+        {
+          seq: 'DA',
+          title: 'SubAuth #1',
+          href: '/sign-in',
+          icon: <LockOpenIcon />,
+          child: [
+            {
+              seq: 'DAA',
+              title: 'SubAuth #1-1',
+              href: '/sign-in',
+              icon: <LockOpenIcon />
+            },
+            {
+              seq: 'DAB',
+              title: 'SubAuth #1-2',
+              href: '/sign-in',
+              icon: <LockOpenIcon />
+            }
+          ]
+        },
+        {
+          seq: 'DB',
+          title: 'SubAuth #2',
+          href: '/sign-in',
+          icon: <LockOpenIcon />
+        },
+        {
+          seq: 'DC',
+          title: 'SubAuth #3',
+          href: '/sign-in',
+          icon: <LockOpenIcon />
+        }
+      ]
     },
     {
+      seq: 'E',
       title: 'Typography',
       href: '/typography',
       icon: <TextFieldsIcon />
     },
     {
+      seq: 'F',
       title: 'Icons',
       href: '/icons',
       icon: <ImageIcon />
     },
     {
+      seq: 'G',
       title: 'Account',
       href: '/account',
       icon: <AccountBoxIcon />
     },
     {
+      seq: 'H',
       title: 'Settings',
       href: '/settings',
       icon: <SettingsIcon />
