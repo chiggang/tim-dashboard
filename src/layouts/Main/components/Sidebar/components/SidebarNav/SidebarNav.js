@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp */
 /* eslint-disable react/display-name */
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useState, useEffect } from 'react';
 import { NavLink as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -16,11 +16,11 @@ import { makeStyles } from '@material-ui/styles';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCamera,
-  faSpinner,
-  faAcorn
-} from '@fortawesome/pro-solid-svg-icons';
+// import {
+//   faCamera,
+//   faSpinner,
+//   faAcorn
+// } from '@fortawesome/pro-solid-svg-icons';
 import { faAmbulance as fadAmbulance } from '@fortawesome/pro-duotone-svg-icons';
 
 const useStyles = makeStyles(theme => ({
@@ -56,6 +56,31 @@ const useStyles = makeStyles(theme => ({
   },
   subButton: {
     paddingLeft: theme.spacing(4)
+  },
+  subMenuIcon: {
+    color: theme.palette.icon,
+    width: 24,
+    height: 24,
+    marginRight: theme.spacing(1)
+  },
+  subMenuIcon3: {
+    display: 'flex',
+    justifyContent: 'flex-end'
+  },
+  subMenuLevel1: {
+    paddingLeft: theme.spacing(2 * 0)
+  },
+  subMenuLevel2: {
+    paddingLeft: theme.spacing(2 * 1)
+  },
+  subMenuLevel3: {
+    paddingLeft: theme.spacing(2 * 2)
+  },
+  subMenuLevel4: {
+    paddingLeft: theme.spacing(2 * 3)
+  },
+  subMenuLevel5: {
+    paddingLeft: theme.spacing(2 * 4)
   }
 }));
 
@@ -76,12 +101,46 @@ const SidebarNav = props => {
   const [open2, setOpen2] = useState(true);
   const [joypadStatus, setJoypadStatus] = useState('');
 
+  // 함수가 생성될 때, 한번만 실행되도록 함
+  useEffect(() => {
+    // 좌측 메뉴의 메뉴 코드를 기억함
+    const createMenuSeq = data => {
+      let menuSeq = [];
+
+      data.map(item => {
+        menuSeq.push({
+          seq: item.seq,
+          opened: false
+        });
+
+        if (item.child) {
+          menuSeq = menuSeq.concat(createMenuSeq(item.child));
+        }
+
+        return null;
+      });
+
+      return menuSeq;
+    };
+
+    setCollapseMenu(createMenuSeq(pages));
+  }, [pages]);
+
   const handleClick = () => {
     setOpen(!open);
   };
 
   const handleClick2 = () => {
     setOpen2(!open2);
+  };
+
+  // 좌측 메뉴의 하위 메뉴를 열고 닫음
+  const handleCollapseMenu = (menuSeq, menuOpened) => {
+    let tempCollapseMenu = [...collapseMenu];
+    tempCollapseMenu.filter(data => data.seq === menuSeq)[0].opened = !menuOpened;
+
+    // 하위 메뉴의 열고 닫음을 처리하고 메뉴에 적용함
+    setCollapseMenu(tempCollapseMenu);
   };
 
 
@@ -101,23 +160,51 @@ const SidebarNav = props => {
     setJoypadStatus(buttonName);
   });
 
+
+
+
+
   // 좌측 메뉴를 생성함
-  const createMenu = () => menuItem => {
+  const createMenu = data => {
     let menu = [];
 
-    menuItem.map(item => {
-      // 하위 메뉴의 열고 닫음 상태를 기억함
-      // setCollapseMenu([
-      //   ...collapseMenu,
-      //   {
-      //     seq: item.seq,
-      //     opened: false
-      //   }
-      // ]);
+    // 메뉴를 출력함(하위 메뉴는 재귀호출로 처리함)
+    data.map(item => {
+      // 하위 메뉴는 들여쓰기를 적용함
+      let classesSubMenuLevel = classes[`subMenuLevel${item.seq.length}`];
 
-      menu.push(
+      // 하위 메뉴가 있을 경우, 하위 메뉴 영역이 열렸는지 닫혔는지에 따라 하위 메뉴를 펼침
+      const tempCollapseMenu = collapseMenu.filter(data => data.seq === item.seq);
+      let menuOpened = null;
+
+      if (tempCollapseMenu.length > 0) {
+        menuOpened = collapseMenu.filter(data => data.seq === item.seq)[0].opened;
+      }
+
+      // 메뉴를 출력함(하위 메뉴가 있음)
+      item.child && menu.push(
         <ListItem
-          className={classes.item}
+          className={clsx(classes.item, classesSubMenuLevel)}
+          disableGutters
+          key={`ListItem_${item.seq}`}
+          onClick={() => handleCollapseMenu(item.seq, menuOpened)}
+        >
+          <Button className={clsx(classes.button, 'focus:outline-none')}>
+            <div className={classes.icon}>{item.icon}</div>
+            {item.title}
+            {menuOpened ?
+              <ExpandLess className={clsx(classes.subMenuIcon, 'absolute right-0')} />
+              :
+              <ExpandMore className={clsx(classes.subMenuIcon, 'absolute right-0')} />
+            }
+          </Button>
+        </ListItem>
+      );
+
+      // 메뉴를 출력함(하위 메뉴가 없음)
+      !item.child && menu.push(
+        <ListItem
+          className={clsx(classes.item, classesSubMenuLevel)}
           disableGutters
           key={`ListItem_${item.seq}`}
         >
@@ -128,33 +215,34 @@ const SidebarNav = props => {
             to={item.href}
           >
             <div className={classes.icon}>{item.icon}</div>
-            {item.seq}: {item.title}
-            {/* {item.child ? <ExpandLess /> : <ExpandMore />} */}
-            {item.child ? <ExpandMore /> : ''}
+            {item.title}
           </Button>
         </ListItem>
       );
 
+      // 하위 메뉴가 있을 경우, 재귀호출로 처리함
       if (item.child) {
-        // menu.push(
-        //   <Collapse in={open} timeout="auto" unmountOnExit key={`ListItemCollapse_${item.seq}`}>
-        //     {createMenu(item.child)}
-        //   </Collapse>
-        // );
+        menu.push(
+          <Collapse in={menuOpened} timeout="auto" unmountOnExit key={`ListItemCollapse_${item.seq}`}>
+            {createMenu(item.child)}
+          </Collapse>
+        );
       }
+
+      return null;
     });
 
     return menu;
   };
 
-
-
-
   return (
     <>
-      <div>
-        {() => createMenu(pages)}
-      </div>
+      <List
+        {...rest}
+        className={clsx(classes.root, className)}
+      >
+        {createMenu(pages)}
+      </List>
       <Divider />
       <List
         {...rest}
