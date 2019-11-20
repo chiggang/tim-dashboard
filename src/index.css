@@ -15,3 +15,6 @@
   font-weight: normal;
   font-style: normal;
 }
+body {
+  font-family: 'NanumSquare Regular' !important;
+}
