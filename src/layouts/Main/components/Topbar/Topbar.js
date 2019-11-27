@@ -2,16 +2,19 @@ import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { AppBar, Toolbar, Badge, Hidden, IconButton, Menu, MenuItem } from '@material-ui/core';
+import {
+  AppBar,
+  Toolbar,
+  Badge,
+  Hidden,
+  IconButton,
+  Menu,
+  MenuItem
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/NotificationImportantOutlined';
 import InputIcon from '@material-ui/icons/Input';
-
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faCheck as fasCheck } from '@fortawesome/pro-solid-svg-icons';
-// import { faCheck as farCheck } from '@fortawesome/pro-regular-svg-icons';
-// import { faGlobeAsia as fadGlobeAsia } from '@fortawesome/pro-duotone-svg-icons';
 
 import { useDataState, useDataDispatch } from 'reducers/context';
 import { sentence } from 'common/language';
@@ -44,7 +47,8 @@ const Topbar = props => {
   const {
     languageItem,
     sentenceItem,
-    currentLanguageCode
+    currentLanguageCode,
+    currentOpenedSidebarMenu
   } = useDataState();
   const dispatch = useDataDispatch();
 
@@ -53,6 +57,20 @@ const Topbar = props => {
   const [notifications] = useState([]);
   const [languageList, setLanguageList] = useState(null);
   const isOpenedLanguageList = Boolean(languageList);
+
+  // 선택한 언어로 문장을 변경함
+  const getSentence = (code, param = {}) => {
+    return sentence(sentenceItem, currentLanguageCode, code, param);
+  }
+
+  // 좌측 메뉴를 열고 닫음
+  const handleDisplaySidebarMenu = () => {
+    // 좌측 메뉴의 출력여부 기억함
+    dispatch({
+      type: 'currentOpenedSidebarMenu',
+      data: !currentOpenedSidebarMenu
+    });
+  };
 
   // 언어 설정 아이콘 위에 언어 목록을 출력함
   const handleViewLanguageList = event => {
@@ -75,33 +93,37 @@ const Topbar = props => {
     setLanguageList(null);
   };
 
-  // 선택한 언어로 문장을 변경함
-  const getSentence = (code, param = {}) => {
-    return sentence(sentenceItem, currentLanguageCode, code, param);
-  }
-
   return (
     <AppBar
       {...rest}
       className={clsx(classes.root, className)}
     >
       <Toolbar>
-        {/* 로고 */}
-        <RouterLink to="/">
-          <span className="font-mono text-sm font-black tracking-widest">T.I.M Dashboard</span>
-          <span className="font-mono ml-3 text-xs">Dev.</span>
-        </RouterLink>
-        <div className={classes.flexGrow} />
-
-        <span className="font-sans text-sm">* 샘플1: {getSentence('m.1')}</span>
-        <div className={classes.flexGrow} />
-        <span className="font-sans text-sm">* 샘플2: {getSentence('m.2')}</span>
-        <div className={classes.flexGrow} />
-        <span className="font-sans text-sm">* 샘플3: {getSentence('m.3', { no1: 1, no2: 2, no3: 3 })}</span>
-        <div className={classes.flexGrow} />
-
         {/* Desktop mode: 아이콘 버튼 */}
         <Hidden mdDown>
+          <IconButton
+            edge="start"
+            className="focus:outline-none"
+            color="inherit"
+            onClick={handleDisplaySidebarMenu}
+          >
+            <MenuIcon />
+          </IconButton>
+
+          {/* 로고 */}
+          <RouterLink to="/">
+            <span className="font-mono text-sm font-black tracking-widest">T.I.M Dashboard</span>
+            <span className="font-mono ml-3 text-xs">Dev.</span>
+          </RouterLink>
+          <div className={classes.flexGrow} />
+
+          <span className="font-sans text-sm">* 샘플1: {getSentence('m.1')}</span>
+          <div className={classes.flexGrow} />
+          <span className="font-sans text-sm">* 샘플2: {getSentence('m.2')}</span>
+          <div className={classes.flexGrow} />
+          <span className="font-sans text-sm">* 샘플3: {getSentence('m.3', { no1: 1, no2: 2, no3: 3 })}</span>
+          <div className={classes.flexGrow} />
+
           {/* 언어 설정 아이콘 */}
           <IconButton
             color="inherit"
@@ -167,6 +189,13 @@ const Topbar = props => {
           >
             <MenuIcon />
           </IconButton>
+
+          {/* 로고 */}
+          <RouterLink to="/">
+            <span className="font-mono text-sm font-black tracking-widest">T.I.M Dashboard</span>
+            <span className="font-mono ml-3 text-xs">Dev.</span>
+          </RouterLink>
+          <div className={classes.flexGrow} />
         </Hidden>
       </Toolbar>
     </AppBar>

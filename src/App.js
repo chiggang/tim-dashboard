@@ -12,7 +12,17 @@ import './assets/scss/index.scss';
 import validators from './common/validators';
 import Routes from './Routes';
 import { useDataDispatch } from 'reducers/context';
-import { languageOption, languageItem, sentenceItem } from 'options/language';
+
+import { systemOption } from 'options/system';
+import { languageItem } from 'options/language';
+import {
+  sentenceItem_common,
+  sentenceItem_move,
+  sentenceItem_sidebarMenu,
+  sentenceItem_signIn,
+  sentenceItem_signUp,
+  sentenceItem_test
+} from 'options/sentence';
 import { sidebarMenuItem } from 'options/sidebarMenu';
 
 const browserHistory = createBrowserHistory();
@@ -32,10 +42,10 @@ const App = () => {
 
   // 최초 한번만 실행함
   useEffect(() => {
-    // 언어의 환경설정을 기억함
+    // 시스템의 환경설정을 기억함
     dispatch({
-      type: 'languageOption',
-      data: languageOption
+      type: 'systemOption',
+      data: systemOption
     });
 
     // 선택할 수 있는 언어 목록을 기억함
@@ -47,13 +57,20 @@ const App = () => {
     // 다국어 문장 목록을 기억함
     dispatch({
       type: 'sentenceItem',
-      data: sentenceItem
+      data: [
+        ...sentenceItem_common,
+        ...sentenceItem_move,
+        ...sentenceItem_sidebarMenu,
+        ...sentenceItem_signIn,
+        ...sentenceItem_signUp,
+        ...sentenceItem_test
+      ]
     });
 
     // 현재 선택한 언어를 기억함
     dispatch({
       type: 'currentLanguageCode',
-      data: languageOption.defaultLanguageCode
+      data: systemOption.defaultLanguageCode
     });
 
     // 좌측 메뉴를 기억함
@@ -61,6 +78,13 @@ const App = () => {
       type: 'sidebarMenuItem',
       data: sidebarMenuItem
     });
+
+    // 좌측 메뉴의 출력여부 기억함
+    dispatch({
+      type: 'currentOpenedSidebarMenu',
+      data: systemOption.defaultOpenedSidebarMenu
+    });
+
   }, [dispatch]);
 
   return (

@@ -16,13 +16,20 @@ import {
   NotFound as NotFoundView
 } from './views';
 
+import { useDataState } from 'reducers/context';
+
 const Routes = () => {
+  const {
+    systemOption
+  } = useDataState();
+
+  // Root URL 접속 시, systemOption.startPage 항목에 설정된 페이지로 접속함
   return (
     <Switch>
       <Redirect
         exact
         from="/"
-        to="/dashboard"
+        to={`/${typeof systemOption.startPage === 'undefined' ? '' : systemOption.startPage}`}
       />
       <RouteWithLayout
         component={DashboardView}

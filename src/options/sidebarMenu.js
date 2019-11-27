@@ -1,4 +1,16 @@
+/*
+ * Title: 좌측 메뉴
+ * Create date: 2019.11.19
+ * 
+ * by chiggang
+ */
+
 // 좌측 메뉴 목록을 정의함
+// @seq: 메뉴 고유코드
+// @title: 메뉴 이름(실제 프로그램에서는 언어별 문장으로 대체되어 사용됨)
+// @href: 메뉴 링크
+// @icon: 메뉴 아이콘(FontAwesome 아이콘을 사용함. ['아이콘 그룹', '아이콘 이름'])
+// @child: 하위 메뉴
 export const sidebarMenuItem = [
   {
     seq: 'A',

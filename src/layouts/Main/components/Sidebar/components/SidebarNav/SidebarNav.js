@@ -10,7 +10,8 @@ import {
   Button,
   colors,
   Collapse,
-  Divider
+  Divider,
+  TextField
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -47,12 +48,21 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     fontWeight: theme.typography.fontWeightMedium
   },
+  buttonText: {
+    width: 'calc(100% - 35px - 20px)',
+    textAlign: 'left'
+  },
+  customRouterLink: {
+    width: '100%',
+    flexGrow: 1
+  },
   icon: {
     color: theme.palette.icon,
-    width: 24,
+    width: 30,
     height: 24,
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'center',
     marginRight: theme.spacing(0.5)
   },
   active: {
@@ -92,10 +102,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+// const CustomRouterLink = forwardRef((props, ref) => (
+//   <div
+//     ref={ref}
+//     className={props.classes.customRouterLink}
+//   >
+//     <RouterLink {...props} />
+//   </div>
+// ));
 const CustomRouterLink = forwardRef((props, ref) => (
   <div
     ref={ref}
-    style={{ flexGrow: 1 }}
+    className={props.extra_class_name.customRouterLink}
   >
     <RouterLink {...props} />
   </div>
@@ -206,13 +224,13 @@ const SidebarNav = props => {
             <div className={classes.icon}>
               <FontAwesomeIcon icon={item.icon} className="text-lg" />
             </div>
-            <span className="font-sans font-medium text-sm">{getSentence(`SidebarMenu.${item.seq}`)}</span>
-            {menuOpened ?
-              <ExpandLess className={clsx(classes.subMenuIcon, 'absolute right-0')} />
-              :
-              <ExpandMore className={clsx(classes.subMenuIcon, 'absolute right-0')} />
-            }
+            <span className={clsx(classes.buttonText, 'font-sans font-medium text-sm truncate')}>{getSentence(`SidebarMenu.${item.seq}`)}</span>
           </Button>
+          {menuOpened ?
+            <ExpandLess className={clsx(classes.subMenuIcon, 'absolute right-0')} />
+            :
+            <ExpandMore className={clsx(classes.subMenuIcon, 'absolute right-0')} />
+          }
         </ListItem>
       );
 
@@ -225,14 +243,15 @@ const SidebarNav = props => {
         >
           <Button
             activeClassName={classes.active}
-            className={classes.button}
+            className={clsx(classes.button, 'focus:outline-none')}
             component={CustomRouterLink}
             to={item.href}
+            extra_class_name={classes}
           >
             <div className={classes.icon}>
               <FontAwesomeIcon icon={item.icon} className="text-lg" />
             </div>
-            <span className="font-sans font-medium text-sm">{getSentence(`SidebarMenu.${item.seq}`)}</span>
+            <span className={clsx(classes.buttonText, 'font-sans font-medium text-sm truncate')}>{getSentence(`SidebarMenu.${item.seq}`)}</span>
           </Button>
         </ListItem>
       );

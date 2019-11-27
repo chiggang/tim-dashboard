@@ -1,11 +1,12 @@
 // 리듀서의 초기값을 정의함
 export const initialState = {
-  languageOption: {},                 /* 언어의 환경설정 */
+  systemOption: {},                   /* 시스템의 환경설정 */
   languageItem: [],                   /* 선택할 수 있는 언어 목록 */
   sentenceItem: [],                   /* 다국어 문장 목록 */
   currentLanguageCode: '',            /* 현재 선택한 언어 */
   sidebarMenuItem: [],                /* 좌측 메뉴 목록 */
   collapseSidebarMenuItem: [],        /* 좌측 메뉴 목록의 폴더 열고 닫음 */
+  currentOpenedSidebarMenu: false,    /* 좌측 메뉴의 출력여부(true: 사용함, false: 사용안함) */
 
   config: {
     server: {}
@@ -28,11 +29,11 @@ export const initialState = {
 // 리듀서를 정의함
 const reducer = (state, action) => {
   switch (action.type) {
-    // 언어의 환경설정을 기억함
-    case 'languageOption':
+    // 시스템의 환경설정을 기억함
+    case 'systemOption':
       return {
         ...state,
-        languageOption: action.data
+        systemOption: action.data
       };
 
     // 선택할 수 있는 언어 목록을 기억함
@@ -69,6 +70,17 @@ const reducer = (state, action) => {
         ...state,
         collapseSidebarMenuItem: action.data
       };
+
+    // 좌측 메뉴의 출력여부 기억함
+    case 'currentOpenedSidebarMenu':
+      return {
+        ...state,
+        currentOpenedSidebarMenu: action.data
+      };
+
+
+
+
 
 
 

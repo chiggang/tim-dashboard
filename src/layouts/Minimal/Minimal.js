@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/styles';
 
-import { Topbar } from './components';
+import { Topbar, Footer } from './components';
+
+// import { useDataState } from 'reducers/context';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -10,11 +12,18 @@ const useStyles = makeStyles(() => ({
     height: '100%'
   },
   content: {
-    height: '100%'
+    height: 'calc(100% - 80px)'
+  },
+  footer: {
+    height: 80
   }
 }));
 
 const Minimal = props => {
+  // const {
+  //   systemOption
+  // } = useDataState();
+
   const { children } = props;
 
   const classes = useStyles();
@@ -22,7 +31,10 @@ const Minimal = props => {
   return (
     <div className={classes.root}>
       <Topbar />
-      <main className={classes.content}>{children}</main>
+      <main className={classes.content}>
+        {children}
+        <Footer className={classes.footer} />
+      </main>
     </div>
   );
 };
