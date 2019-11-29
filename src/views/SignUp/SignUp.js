@@ -26,7 +26,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 
-// import { draggableDialog } from 'helpers';
+// 다이얼로그를 드래그하여 이동함
 import { draggableDialog } from 'common/draggableDialog';
 
 // Reducer를 정의함
